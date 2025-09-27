@@ -1,5 +1,3 @@
-import json
-
 from flask import Blueprint, render_template, request
 
 from server.db import add_data, retrieve_data
@@ -56,9 +54,11 @@ def explore():
 def analyse():
     return render_template("weather/analyse.html")
 
+
 @bp.route("/about")
 def about():
     return render_template("weather/about.html")
+
 
 @bp.route("/data", methods=("POST",))
 def post_data():
@@ -75,13 +75,13 @@ def post_data():
     return "JSON received!"
 
 
-@bp.route("/data", methods=("GET",))
+@bp.route("/api/data", methods=("GET",))
 def get_data():
     # Get the JSON data from the SQL database
-    results = retrieve_data(100)
-    results = [dict(row) for row in results]
-    json_string = json.dumps(results)
-    return json_string
+    results = retrieve_data(1)
+    results = dict(results[0])
+    results["pressure"] /= 10  # convert pressure to millibars
+    return results
 
 
 @bp.route("/test_graph", methods=("GET",))

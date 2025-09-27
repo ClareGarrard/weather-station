@@ -1,9 +1,5 @@
 {% extends 'base_legacy.html' %}
 
-{% block head %}
-  <meta http-equiv="Refresh" content="300" />
-{% endblock %}
-
 {% block header %}
   <h1>{% block title %}Current Conditions{% endblock %}</h1>
 {% endblock %}
@@ -31,7 +27,7 @@
         </svg>
       </div>
       <div class="feature-description">Humidity %</div>
-      <div class="feature-value">{{latest_data["humidity"]}}</div>
+      <div class="feature-value" data-key="humidity">{{latest_data["humidity"]}}</div>
     </div>
     <div class="feature">
       <div class="feature-icon">
@@ -48,7 +44,7 @@
         </svg>
       </div>
       <div class="feature-description">Temperature &deg;C</div>
-      <div class="feature-value">{{latest_data["temperature"]}}</div>
+      <div class="feature-value" data-key="temperature">{{latest_data["temperature"]}}</div>
     </div>
     <div class="feature">
       <div class="feature-icon">
@@ -70,7 +66,7 @@
         </svg>
       </div>
       <div class="feature-description">Pressure mBar</div>
-      <div class="feature-value">{{latest_data["pressure"]/100}}</div>
+      <div class="feature-value" data-key="pressure">{{latest_data["pressure"]/100}}</div>
     </div>
     <div class="feature">
       <div class="feature-icon">
@@ -97,7 +93,7 @@
         </svg>
       </div>
       <div class="feature-description">eCO2 ppm</div>
-      <div class="feature-value">{{latest_data["eCO2"]}}</div>
+      <div class="feature-value" data-key="eCO2">{{latest_data["eCO2"]}}</div>
     </div>
     <div class="feature">
       <div class="feature-icon">
@@ -118,12 +114,14 @@
         </svg>
       </div>
       <div class="feature-description">CO2 ppm</div>
-      <div class="feature-value">{{latest_data["CO2"]}}</div>
+      <div class="feature-value" data-key="CO2">{{latest_data["CO2"]}}</div>
     </div>
   </section>
+
+  <script src="{{ url_for('static', filename='update_data.js') }}"></script>
 {% endblock %}
 
 {% block footer %}
-  <p>Last updated: {{latest_data["timestamp"]}}</p>
+  <p>Last updated: <span data-key="timestamp">{{latest_data["timestamp"]}}</span></p>
   <p><a href="/">View full weather station</a></p>
 {% endblock %}
