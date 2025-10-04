@@ -117,11 +117,11 @@
       <div class="feature-value" data-key="CO2">{{latest_data["CO2"]}}</div>
     </div>
   </section>
-
-  <script src="{{ url_for('static', filename='scripts.js') }}"></script>
 {% endblock %}
 
 {% block footer %}
   <p>Last updated: <span data-key="timestamp">{{latest_data["timestamp"]}}</span> UTC</p>
   <p><a href="/">View full weather station</a></p>
+
+  <script src="{{ url_for('static', filename='scripts.js') }}"></script>
 {% endblock %}
