@@ -230,6 +230,21 @@ Run the update-server script on the server command line:
 ```
 This will run a `git pull` and restart the Gunicorn server.
 
+## SQLite Database Migrations
+To update the database structure, create a migrations file in `instance/migrations`. Save each new migrations file with an incrementing prefix, e.g., 001, 002, etc. 
+See the [SQLite documentation](https://www.sqlite.org/lang_altertable.html) for syntax. 
+
+For example, a `00x_migrations.sql` file might look like:
+```sql
+ALTER TABLE weather ADD COLUMN co2 INTEGER;
+```
+Remember to mirror the result of these changes in the `schema.sql` file so that it will continue to reflect the current database structure. 
+
+Run the migrations file on the command line with:
+```sh
+sqlite3 weather.sqlite < migrations/001_add_CO2_col.sql
+```
+
 ## Development of Pico scripts
 * The ```rp2``` directory mirrors the scripts that will go onto the Raspberry Pi Pico. 
 

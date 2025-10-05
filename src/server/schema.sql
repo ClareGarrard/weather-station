@@ -7,7 +7,8 @@ CREATE TABLE weather (
   pressure INTEGER NOT NULL,
   humidity INTEGER NOT NULL,
   air_quality INTEGER NOT NULL,
-  eCO2 INTEGER NOT NULL
+  eCO2 INTEGER NOT NULL,
+  co2 INTEGER
 );
 
 
