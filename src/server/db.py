@@ -33,13 +33,13 @@ def close_db(e=None):
         db.close()
 
 
-def add_data(timestamp, temperature, pressure, humidity, air_quality, eCO2):
+def add_data(timestamp, temperature, pressure, humidity, air_quality, eCO2, co2):
     """Add data to database."""
     db = get_db()
     db.execute(
-        "INSERT INTO weather (timestamp, temperature, pressure, humidity, air_quality, eCO2)"
-        " VALUES (?, ?, ?, ?, ?, ?);",
-        (timestamp, temperature, pressure, humidity, air_quality, eCO2),
+        "INSERT INTO weather (timestamp, temperature, pressure, humidity, air_quality, eCO2, co2)"
+        " VALUES (?, ?, ?, ?, ?, ?, ?);",
+        (timestamp, temperature, pressure, humidity, air_quality, eCO2, co2),
     )
     db.commit()
 
