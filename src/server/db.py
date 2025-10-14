@@ -47,7 +47,7 @@ def add_data(timestamp, temperature, pressure, humidity, air_quality, eCO2, co2)
 def retrieve_data(limit): 
     db = get_db()
     return db.execute(
-        f"SELECT cast(timestamp as text) as timestamp, temperature, pressure, humidity, air_quality, eCO2"
+        f"SELECT cast(timestamp as text) as timestamp, temperature, pressure, humidity, air_quality, eCO2, co2"
         f" FROM weather"
         f" ORDER BY timestamp DESC"
         f" LIMIT {limit};"
