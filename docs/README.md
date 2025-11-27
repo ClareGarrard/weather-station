@@ -116,13 +116,10 @@ flask --app server init-db
 The database will appear in the `instance` directory as `weather.sqlite`
 
 ## Raspberry Pi Pico W + Kitronik Air Quality Board
-* Copy scripts from ```rp2``` onto Raspberry Pi Pico. 
-* Change constants at the top of the copy of ```main.py``` on the Pico:
-```
-SERVER_URL = 'localhost'+'/data'
-WIFI_NAME = 'Wifi_name'
-WIFI_PASSWORD = 'Wifi_password'
-```
+* Set up a ```wifi_credentials``` file in the `rp2` directory. Follow the structure of `example_wifi_credentials` - with the network name on the first line, and the password on the second line. 
+    * The `wifi_credentials` file is listed in the gitignore, so should not be committed by mistake if developing. 
+* The SERVER_URL in `main.py` uses the default hostname of the Raspberry Pi and matches that of server_name in the the nginx `weather.config`. 
+* Once updated, copy scripts from ```rp2``` onto Raspberry Pi Pico. 
 
 From this point see [Development Server](#development-server) or [Deploying to Production](#deploying-to-production) as required. 
 
