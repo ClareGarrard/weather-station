@@ -71,6 +71,7 @@ def post_data():
         data["humidity"],
         data["air_quality"],
         data["e_co2"],
+        data.get("co2", None) # default=None
     )
     return "JSON received!"
 

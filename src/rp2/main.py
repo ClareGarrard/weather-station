@@ -129,7 +129,7 @@ def queue_data(buffered_data, data):
 
     # Allowed keys: Kitronik data readings for database. 
     # Possibly modify later & expand allowed database schema.
-    allowed_keys = ["timestamp", "temperature", "pressure", "humidity", "air_quality", "e_co2"]
+    allowed_keys = ["timestamp", "temperature", "pressure", "humidity", "air_quality", "e_co2", "co2"]
     allowed_data = {key:data[key] for key in allowed_keys}
 
     buffered_data.append(allowed_data)
