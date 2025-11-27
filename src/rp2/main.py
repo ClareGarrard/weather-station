@@ -8,9 +8,10 @@ import ntptime
 import urequests
 from PicoAirQuality import KitronikBME688, KitronikOLED, KitronikRTC, KitronikZIPLEDs
 
-SERVER_URL = "localhost" + "/data"
-WIFI_NAME = "Wifi_name"
-WIFI_PASSWORD = "Wifi_password"
+SERVER_URL = "http://raspberrypi.local" + "/data"
+
+with open('wifi_credentials') as f:
+    WIFI_NAME, WIFI_PASSWORD = f.readlines()[:2]
 
 # Kitronik Board
 bme688 = KitronikBME688()
@@ -156,9 +157,11 @@ def send_data(buffered_data):
                 response.close()
                 if status in [HTTP_OK, HTTP_CREATED, HTTP_ACCEPTED]:
                     buffered_data.pop(0)
-            except Exception as e:
+            except Exception as e: 
+                import sys
                 print("could not send!")
                 print(e)
+                sys.print_exception(e)
                 zipleds.setLED(1, zipleds.CYAN)
                 zipleds.setBrightness(10)
                 zipleds.show()
