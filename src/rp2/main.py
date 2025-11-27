@@ -11,6 +11,7 @@ from PicoAirQuality import KitronikBME688, KitronikOLED, KitronikRTC, KitronikZI
 SERVER_URL = "localhost" + "/data"
 WIFI_NAME = "Wifi_name"
 WIFI_PASSWORD = "Wifi_password"
+SEND_DATA_INTERVAL = 60 # seconds
 
 # Kitronik Board
 bme688 = KitronikBME688()
@@ -171,7 +172,7 @@ if __name__ == "__main__":
     ntptime.settime()
     rtc.getDateTime()
 
-    counter = 295  # Sends through first reading to server, then every 5 min
+    counter = SEND_DATA_INTERVAL - 5  # Sends through first reading to server, then every SEND_DATA_INTERVAL seconds
     buffered_data = []
 
     print('initialising...')
@@ -179,7 +180,7 @@ if __name__ == "__main__":
     time.sleep(5)
 
     while True:
-        while counter < 300:
+        while counter < SEND_DATA_INTERVAL:
             data = measure_data()
 
             print(data)
