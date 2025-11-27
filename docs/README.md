@@ -242,7 +242,9 @@ Remember to mirror the result of these changes in the `schema.sql` file so that 
 
 Run the migrations file on the command line with:
 ```sh
+sudo systemctl stop weather-station
 sqlite3 weather.sqlite < migrations/001_add_CO2_col.sql
+sudo systemctl start weather-station
 ```
 
 ## Development of Pico scripts
