@@ -9,12 +9,11 @@ Why? To monitor and record indoor readings that will facilitate modifications fo
 ![IAQ](https://img.shields.io/badge/IAQ-/500-orange)
 ![eCO2](https://img.shields.io/badge/eCO2-ppm-teal)
 
-![Weather station home](Weather_station_home.png)
+![Weather station home page](Weather_station_home.png)
 
 # Setup
 
-In the original setup, the server is run from a Raspberry Pi, while development takes place on a laptop. They have slightly different needs for their environment setup and so are addressed separately here. 
- 
+In the original setup, the server is run from a Raspberry Pi, while development takes place on a laptop. They have slightly different needs for their environment setup and so are addressed separately here.  
 
 [![Raspberry Pi](https://img.shields.io/badge/raspberry%20pi-A22846?logo=raspberrypi&logoColor=white&style=flat)](https://www.raspberrypi.com/products/)
 [![Python 3.11](https://img.shields.io/badge/Python-3.11-blue?logo=Python&logoColor=yellow&style=flat)](https://docs.python.org/3.11/)
@@ -29,7 +28,7 @@ Overview:
 * [Environment setup on Mac/Linux computer](#environment-setup-on-maclinux-computer)
 * [Environment setup on Raspberry Pi](#environment-setup-on-raspberry-pi)
 * [SQLite Database](#sqlite-database)
-* [Raspberry Pi Pico W + Kitronik Air Quality Board](#raspberry-pi-pico-w--kitronik-air-quality-board)
+* [Sensors](#sensors)
 * [Development Server](#development-server)
 * [Deploying to Production](#deploying-to-production)
 
@@ -115,7 +114,15 @@ flask --app server init-db
 ```
 The database will appear in the `instance` directory as `weather.sqlite`
 
-## Raspberry Pi Pico W + Kitronik Air Quality Board
+## Sensors
+* Kitronik Air Quality Board 
+* Raspberry Pi Pico WH 
+* Adafruit SCD40 photoacoustic CO2 sensor
+
+See the [appendix](#appendix) for additional detail on the hardware and sensors. 
+
+![Hardware: sensor setup with Kitronik board,  Raspberry Pi Pico WH, and Adafruit photoacoustic CO2 sensor](Sensors_and_pico.jpg)
+
 * Set up a ```wifi_credentials``` file in the `rp2` directory. Follow the structure of `example_wifi_credentials` - with the network name on the first line, and the password on the second line. 
     * The `wifi_credentials` file is listed in the gitignore, so should not be committed by mistake if developing. 
 * The SERVER_URL in `main.py` uses the default hostname of the Raspberry Pi and matches that of server_name in the the nginx `weather.config`. 
@@ -152,7 +159,7 @@ Install the [nginx](https://nginx.org/) HTTP server:
 sudo apt-get install nginx
 ```
 
-Set up a symbolic link to the ![nginx config](../src/server/nginx/weather-station.config) at `/etc/nginx/sites-enabled/weather-station.config`:
+Set up a symbolic link to the [nginx config](../src/server/nginx/weather-station.config) at `/etc/nginx/sites-enabled/weather-station.config`:
 ```
 cd /etc/nginx/sites-enabled/
 sudo ln -s /home/{username}/Code/weather-station/src/server/nginx/weather-station.config .
@@ -249,6 +256,8 @@ sudo systemctl start weather-station
 
 # Appendix
 * [Kitronik Air Quality Board](https://github.com/KitronikLtd/Kitronik-Pico-Smart-Air-Quality-Board-MicroPython)
-* [BME68X Sensor API](https://github.com/boschsensortec/BME68x_SensorAPI)
-* [Data sheet for BME688](https://www.bosch-sensortec.com/media/boschsensortec/downloads/datasheets/bst-bme688-ds000.pdf)
+    * [BME68X Sensor API](https://github.com/boschsensortec/BME68x_SensorAPI)
+    * [Data sheet for BME688](https://www.bosch-sensortec.com/media/boschsensortec/downloads/datasheets/bst-bme688-ds000.pdf)
+* [Raspberry Pi Pico WH documentation](https://www.raspberrypi.com/documentation/microcontrollers/pico-series.html#picow-technical-specification)
+* [Adafruit SCD40 photacourstic carbon dioxide sensor](https://learn.adafruit.com/adafruit-scd-40-and-scd-41)
 * [Bootstrap icons](https://icons.getbootstrap.com/) were used for the dashboard
