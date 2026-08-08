@@ -65,7 +65,7 @@ a:hover, a:focus {
 }
 
 .feature-icon {
-  font-size: 2.0rem;
+  font-size: 1.5rem;
 }
 
 .feature-description {
@@ -74,7 +74,7 @@ a:hover, a:focus {
 }
 
 .feature-value {
-  font-size: 3.0rem;
+  font-size: 3.5rem;
   font-weight: 500;
 
   margin-top: 0;
