@@ -80,3 +80,7 @@ a:hover, a:focus {
   margin-top: 0;
   margin-bottom: 0.5rem;
 }
+
+.countdown {
+  color: #b2b6ba;
+}
