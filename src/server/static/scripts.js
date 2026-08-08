@@ -3,6 +3,11 @@
 
 var DATA_UPDATE_INTERVAL_SECONDS = 60;
 
+function time_str_to_local_time(time_str) {
+    var date = Date.parse(time_str.replace(" ", "T") + ".000Z");
+    return new Date(date).toTimeString().substring(0, 5);
+}
+
 function updateData() {
     if (window.fetch) {
         // Modern browsers: use fetch API
@@ -46,6 +51,9 @@ function updateFeatures(data) {
         var feature = features[idx];
         var keyword = keywords[idx];
         var dataValue = data[keyword];
+
+        // handle special cases
+        if (keyword == 'local_timestamp') dataValue = time_str_to_local_time(data['timestamp']);
 
         // set the value of the html element to the value of the data
         feature.textContent = dataValue;
