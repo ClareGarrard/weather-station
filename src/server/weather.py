@@ -1,3 +1,5 @@
+from datetime import datetime, timezone
+
 from flask import Blueprint, render_template, request
 
 from server import vapour
@@ -28,6 +30,16 @@ def retrieve_data_extended():
     data["dew_point"] = vapour.round_sig(data["dew_point"], 2)
 
     return [data]
+
+
+@bp.app_template_filter("parse_utc_timestamp")
+def parse_utc_timestamp(value: str, format="%Y-%m-%d %H:%M:%S"):
+    return datetime.strptime(value, format).replace(tzinfo=timezone.utc)
+
+
+@bp.app_template_filter("datetime_format")
+def datetime_format(value, format="%Y-%m-%d %H:%M:%S"):
+    return value.strftime(format)
 
 
 @bp.route("/")
@@ -94,7 +106,7 @@ def post_data():
         data["humidity"],
         data["air_quality"],
         data["e_co2"],
-        data.get("co2", None) # default=None
+        data.get("co2", None),  # default=None
     )
     return "JSON received!"
 

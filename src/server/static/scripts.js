@@ -2,6 +2,14 @@
 // Legacy support is specifically tailored to Firefox Version 5.3 (2) for iOS.
 
 var DATA_UPDATE_INTERVAL_SECONDS = 60;
+var DATA_COUNTDOWN_INTERVAL_SECONDS = 5;
+
+var countdown_idx = 1;
+
+function time_str_to_local_time(time_str) {
+    var date = Date.parse(time_str.replace(" ", "T") + ".000Z");
+    return new Date(date).toTimeString().substring(0, 5);
+}
 
 function updateData() {
     if (window.fetch) {
@@ -47,9 +55,23 @@ function updateFeatures(data) {
         var keyword = keywords[idx];
         var dataValue = data[keyword];
 
+        // handle special cases
+        if (keyword == 'local_timestamp') dataValue = time_str_to_local_time(data['timestamp']);
+
         // set the value of the html element to the value of the data
         feature.textContent = dataValue;
     }
 }
 
+function countdownData() {
+    var icons = '⠿⠾⠾⠼⠼⠸⠸⠘⠘⠈⠈⠀'; // 6-dot braille - last character is a 0-dot braille
+    var countdown = document.querySelector(".countdown");
+
+    countdown.textContent = icons[countdown_idx % icons.length];
+
+    countdown_idx += 1;
+    countdown %= icons.length;
+}
+
 setInterval(updateData, DATA_UPDATE_INTERVAL_SECONDS * 1000);
+setInterval(countdownData, DATA_COUNTDOWN_INTERVAL_SECONDS * 1000);
