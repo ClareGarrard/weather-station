@@ -1,4 +1,5 @@
 import sqlite3
+from typing import Any, Generator
 
 import click
 from flask import current_app, g
@@ -44,7 +45,7 @@ def add_data(timestamp, temperature, pressure, humidity, air_quality, eCO2, co2)
     db.commit()
 
 
-def retrieve_data(limit):
+def retrieve_data(limit) -> Generator[dict[str, Any], None, None]:
     db = get_db()
     rows = db.execute(
         f"SELECT cast(timestamp as text) as timestamp, temperature, pressure, humidity, air_quality, eCO2, co2"
@@ -57,7 +58,9 @@ def retrieve_data(limit):
     for row in rows:
         record = dict(row)
         record["timestamp"] = record["timestamp"].replace("/", "-")
-        yield record  # return each row in an iterator
+
+        # return a generator of row dictionaries
+        yield record
 
 
 @click.command("init-db")

@@ -1,4 +1,5 @@
 from datetime import datetime, timezone
+from typing import Any, Generator
 
 from flask import Blueprint, render_template, request
 
@@ -18,18 +19,16 @@ weather_dict = {
 }
 
 
-def retrieve_data_extended():
-    latest_data = retrieve_data(limit=1)
-    data = [dict(row) for row in latest_data][0]
+def retrieve_data_extended(limit=1) -> Generator[dict[str, Any], None, None]:
+    for data in retrieve_data(limit=limit):
+        relative_humidity = data["humidity"]
+        temperature = data["temperature"]
+        data["absolute_humidity"] = vapour.calc_absolute_humidity(relative_humidity, temperature)
+        data["dew_point"] = vapour.calc_dew_point(relative_humidity, temperature)
+        data["absolute_humidity"] = vapour.round_sig(data["absolute_humidity"], 2)
+        data["dew_point"] = vapour.round_sig(data["dew_point"], 2)
 
-    relative_humidity = data["humidity"]
-    temperature = data["temperature"]
-    data["absolute_humidity"] = vapour.calc_absolute_humidity(relative_humidity, temperature)
-    data["dew_point"] = vapour.calc_dew_point(relative_humidity, temperature)
-    data["absolute_humidity"] = vapour.round_sig(data["absolute_humidity"], 2)
-    data["dew_point"] = vapour.round_sig(data["dew_point"], 2)
-
-    return [data]
+        yield data
 
 
 @bp.app_template_filter("parse_utc_timestamp")
@@ -44,22 +43,19 @@ def datetime_format(value, format="%Y-%m-%d %H:%M:%S"):
 
 @bp.route("/")
 def index():
-    latest_data = retrieve_data(limit=1)
-    latest_data = [dict(row) for row in latest_data][0]
+    latest_data = next(retrieve_data(limit=1))
     return render_template("weather/index.html", latest_data=latest_data)
 
 
 @bp.route("/legacy")
 def legacy():
-    latest_data = retrieve_data_extended()
-    latest_data = [dict(row) for row in latest_data][0]
+    latest_data = next(retrieve_data_extended(limit=1))
     return render_template("weather/legacy.html", latest_data=latest_data)
 
 
 @bp.route("/visualise")
 def visualise():
-    latest_data = retrieve_data(limit=1)
-    latest_data = [dict(row) for row in latest_data][0]
+    latest_data = next(retrieve_data(limit=1))
     return render_template(
         "weather/visualise.html", easy_linegraph=easy_linegraph, latest_data=latest_data
     )
@@ -70,8 +66,7 @@ def explore():
     measurement_x = request.args.get("measurement_x", default="timestamp_unix_epoch")
     weather_component_y = request.args.get("weather_component_y", default="humidity")
     time_period = request.args.get("time_period", default=72)  # = 6hours (+- 12 readings/hr)
-    latest_data = retrieve_data(limit=1)
-    latest_data = [dict(row) for row in latest_data][0]
+    latest_data = next(retrieve_data(limit=1))
     return render_template(
         "weather/explore.html",
         weather_graph_template=easy_linegraph(
@@ -114,8 +109,7 @@ def post_data():
 @bp.route("/api/data", methods=("GET",))
 def get_data():
     # Get the JSON data from the SQL database
-    results = retrieve_data_extended()
-    results = dict(results[0])
+    results = next(retrieve_data_extended())
     results["pressure"] /= 100  # convert pressure to millibars
     return results
 
