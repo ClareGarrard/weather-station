@@ -1,3 +1,5 @@
+from datetime import datetime, timezone
+
 from flask import Blueprint, render_template, request
 
 from server.db import add_data, retrieve_data
@@ -5,15 +7,24 @@ from server.graphs import default_graph, easy_linegraph
 
 bp = Blueprint("weather", __name__)
 
-
 weather_dict = {
-"humidity": "Humidity %",
-"temperature": "Temperature C",
-"pressure": "Pressure Pa",
-"air_quality": "IAQ",
-"eCO2": "eCO2 ppm",
-"timestamp_unix_epoch": "Time",
+    "humidity": "Humidity %",
+    "temperature": "Temperature C",
+    "pressure": "Pressure Pa",
+    "air_quality": "IAQ",
+    "eCO2": "eCO2 ppm",
+    "timestamp_unix_epoch": "Time",
 }
+
+
+@bp.app_template_filter("parse_utc_timestamp")
+def parse_utc_timestamp(value: str, format="%Y-%m-%d %H:%M:%S"):
+    return datetime.strptime(value, format).replace(tzinfo=timezone.utc)
+
+
+@bp.app_template_filter("datetime_format")
+def datetime_format(value, format="%Y-%m-%d %H:%M:%S"):
+    return value.strftime(format)
 
 
 @bp.route("/")
@@ -34,20 +45,29 @@ def legacy():
 def visualise():
     latest_data = retrieve_data(limit=1)
     latest_data = [dict(row) for row in latest_data][0]
-    return render_template("weather/visualise.html", easy_linegraph=easy_linegraph, latest_data=latest_data)
+    return render_template(
+        "weather/visualise.html", easy_linegraph=easy_linegraph, latest_data=latest_data
+    )
 
 
 @bp.route("/explore", methods=("GET",))
 def explore():
-    measurement_x = request.args.get('measurement_x', default='timestamp_unix_epoch')
-    weather_component_y = request.args.get('weather_component_y', default='humidity')
-    time_period= request.args.get('time_period', default=72) # = 6hours (+- 12 readings/hr)
+    measurement_x = request.args.get("measurement_x", default="timestamp_unix_epoch")
+    weather_component_y = request.args.get("weather_component_y", default="humidity")
+    time_period = request.args.get("time_period", default=72)  # = 6hours (+- 12 readings/hr)
     latest_data = retrieve_data(limit=1)
     latest_data = [dict(row) for row in latest_data][0]
-    return render_template("weather/explore.html", 
-                            weather_graph_template=easy_linegraph(weather_component_y, weather_dict[weather_component_y], 
-                                measurement_x, weather_dict[measurement_x], limit=int(time_period)),
-                                latest_data=latest_data)
+    return render_template(
+        "weather/explore.html",
+        weather_graph_template=easy_linegraph(
+            weather_component_y,
+            weather_dict[weather_component_y],
+            measurement_x,
+            weather_dict[measurement_x],
+            limit=int(time_period),
+        ),
+        latest_data=latest_data,
+    )
 
 
 @bp.route("/analyse")
