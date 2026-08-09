@@ -10,7 +10,7 @@ def round_sig(x, sig=3):
     return round(x, sig - int(math.floor(math.log10(abs(x)))) - 1)
 
 
-def calc_dewpoint(relative_humidity, temperature):
+def calc_dew_point(relative_humidity, temperature):
     """
     Calculate the dew point, given the relative humidity and temperature, using the Magnus formula.
 
