@@ -42,6 +42,19 @@ For old devices, where the browser cannot be updated, a link is provided from th
 
 ![Legacy dashboard](Weather_station_legacy.png)
 
+### Countdown indicator
+There is a countdown indicator at the bottom of the dashboard which shows the time remaining till the next update. Each dot roughly represents 10 seconds.
+
+| Symbol | Time remaining |
+| ------ | -------------- |
+| ⠿      | 60 seconds     |
+| ⠾      | 55 seconds     |
+| ⠼      | 45 seconds     |
+| ⠸      | 35 seconds     |
+| ⠘      | 25 seconds     |
+| ⠈      | 15 seconds     |
+| ⠀      | 5 seconds      |
+
 ## Environment setup on Mac/Linux computer
 ### Pyenv
 Use `pyenv` to change the python version for the project directory.* 
