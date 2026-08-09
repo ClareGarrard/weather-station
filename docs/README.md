@@ -37,6 +37,11 @@ Once it is set up and running, graphs will begin to generate on the Visualise pa
 ![Visualise page](Visualise_page.png)
 
 
+## Legacy dashboard
+For old devices, where the browser cannot be updated, a link is provided from the Home page to the legacy dashboard. This simpler dashboard uses pure CSS and Javascript with no frameworks, and is compatible with Firefox 5.3 (July 2011).
+
+![Legacy dashboard](Weather_station_legacy.png)
+
 ## Environment setup on Mac/Linux computer
 ### Pyenv
 Use `pyenv` to change the python version for the project directory.* 
